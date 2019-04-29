@@ -1,5 +1,9 @@
-const express = require("express"); 
+const express = require("express");
+const rotaALuno = require("./src/routes/alunos");
+const rotaCurso = require("./src/routes/cursos");
 const app = express();
+app.use("/alunos", rotaALuno);
+app.use("/cursos", rotaCurso);
 
 app.get("/escola", (req, res) => {
 
