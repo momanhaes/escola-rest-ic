@@ -8,17 +8,17 @@ POST http://localhost:3000/cursos
 Content-Type: application/json
 
 {
-  "nome": "Sistemas de Informação"
+  "nome": "Direito"
 }
 
 ###
-PUT http://localhost:3000/cursos/5cd0f773d9950477b04eb1c8
+PUT http://localhost:3000/cursos/5cd1082e7db98d7a546a6036
 Content-Type: application/json
 
 {
-  "nome": "Sistemas de Informação"
+  "nome": "Administração"
 }
 
 ###
-DELETE http://localhost:3000/cursos/5cd0f488a34bf36084f57dd9
+DELETE http://localhost:3000/cursos/5cd105c0d7d50d58e00397c8
 Content-Type: application/json

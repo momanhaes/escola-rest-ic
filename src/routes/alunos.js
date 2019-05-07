@@ -18,7 +18,8 @@ router.get('/:_id', async(req,res) => {
 
     const aluno = await Aluno
         .findOne({ _id: req.params._id })
-        .select('_id nome dataNascimento matriculaAtiva estadoCivil matricula telefone idade');
+        .select('_id nome dataNascimento matriculaAtiva estadoCivil matricula telefone idade')
+        .populate('curso', '_id nome');
 
     if (!aluno) return res.status(404).json({ message: 'Aluno não encontrado' });
 
@@ -34,7 +35,8 @@ router.post('/', async(req, res) => {
         estadoCivil: req.body.estadoCivil,
         matricula: req.body.matricula,
         telefone: req.body.telefone,
-        idade: req.body.idade
+        idade: req.body.idade,
+        curso: req.body.cursoId
     });
 
     return res.status(201).json(aluno);
