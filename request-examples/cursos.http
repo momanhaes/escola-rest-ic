@@ -1,0 +1,24 @@
+GET http://localhost:3000/cursos
+
+###
+GET http://localhost:3000/cursos/Medicina
+
+###
+POST http://localhost:3000/cursos
+Content-Type: application/json
+
+{
+  "nome": "Sistemas de Informação"
+}
+
+###
+PUT http://localhost:3000/cursos/5cd0f773d9950477b04eb1c8
+Content-Type: application/json
+
+{
+  "nome": "Sistemas de Informação"
+}
+
+###
+DELETE http://localhost:3000/cursos/5cd0f488a34bf36084f57dd9
+Content-Type: application/json

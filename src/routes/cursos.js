@@ -1,63 +1,69 @@
-const route = require("express").Router();
-const escola = require("../database/database");
+const router = require('express').Router();
+const mongoose = require('mongoose');
+const Curso = require('../models/Curso');
 
-route.get("/", (req,res) => {
-    const cursos = escola.cursos.map(curso => ({
-        id: curso.id,
-        nome: curso.nome
-    }));
+router.get('/', async(req,res) => {
+    const cursos = await Curso
+        .find()
+        .select('nome _id alunos');
 
-    if (cursos.length === 0) return res.status(404).json({ message: 'Nenhum curso encontrado' });
+    if (cursos.length <= 0) return res
+        .status(404)
+        .json({ message: 'Nenhum curso foi encontrado' });
 
     return res.status(200).json(cursos);
 });
 
-route.get("/:id", (req,res) => {
-    const id = req.params.id;
-    const curso = escola.cursos.find(curso => curso.id === id);
-    
-    if (!curso) return res.status(404).json({ message: 'Não encontrado' });
+router.get('/:nome', async(req,res) => {
+    const curso = await Curso
+        .findOne({ nome: req.params.nome })
+        .select('nome _id alunos');
 
-    delete curso.alunos;
+    if (!curso) return res.status(404).json({ message: 'Curso não encontrado' });
+
     return res.status(200).json(curso);
 });
 
-route.post("/", (req, res) => {
-    const curso = {
-        id: req.body.id,
-        nome: req.body.nome
-    };
-    
-    escola.cursos.push(curso);
+router.post('/', async(req, res) => {
+    try {
+        const curso = await Curso.create({
+            _id: mongoose.Types.ObjectId(),
+            nome: req.body.nome
+        });
 
-    return res.status(201).json({ curso });
+        return res.status(201).json(curso);
+    } catch (err) {
+        if(err.code === 11000) return res.status(500).json({ message: 'Curso já existente' });
+        return res.status(500).json({ message: 'Error' });
+    }
 });
 
-route.put('/:id', (req, res) => {
-    const id = req.params.id;
-    const nome = req.body.nome;
+router.put('/:_id', async(req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params._id))
+        return res.status(500).json({ message: 'id inválido' });
 
-    const curso = escola.cursos.find(curso => curso.id === id);
+    const curso = await Curso.findById(req.params._id);
 
     if (curso) {
-        const cursos = escola.cursos.filter(curso => curso.id !== id);
-        cursos.push({ id, nome });
-        escola.cursos = cursos;
+        await Curso.updateOne({ _id: req.params._id }, { nome: req.body.nome });
 
-        return res.status(201).json({ message: 'Curso alterado' });
+        return res.status(201).json({ message: 'Curso atualizado' });
+    } else {
+        await Curso.create({
+            _id: mongoose.Types.ObjectId(),
+            nome: req.body.nome
+        });
+        return res.status(201).json({ message: 'Curso adicionado' });
     }
-
-    escola.cursos.push({ id, nome });
-    return res.status(201).json({ message: 'Curso adicionado' });
 });
 
-route.delete("/:id", (req, res) => {
-    const id = req.params.id;
-    const cursos = escola.cursos.filter(curso => curso.id !== id);
-    escola.cursos = cursos;
-    console.log(escola.cursos);
-    
-    return res.status(200).json({message: "Removido com sucesso"});
+router.delete('/:_id', async(req, res) => {
+    try {
+        await Curso.deleteOne({ _id: req.params._id });
+        return res.status(200).json({ message: 'Removido com sucesso' });
+    } catch (err) {
+        return res.status(500).json({ message: 'Erro interno' });
+    }
 });
 
-module.exports = route;
+module.exports = router;

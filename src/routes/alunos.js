@@ -1,36 +1,33 @@
-const route = require("express").Router();
-const escola = require("../database/database");
-const R = require('ramda');
+const router = require('express').Router();
+const mongoose = require('mongoose');
+const Aluno = require('../models/Aluno');
 
-route.get("/", (req, res) => {
-    const alunos = escola.cursos.map(curso => {
-        return curso.alunos;
-    });
+router.get('/', async(req, res) => {
+    const alunos = await Aluno
+        .find()
+        .select('_id nome dataNascimento matriculaAtiva estadoCivil matricula telefone idade');
 
-    return res.status(200).json(R.flatten(alunos));
+    if (alunos.length <= 0) return res.status(404).json({ message: 'Nenhum aluno encontrado' });
+
+    return res.status(200).json(alunos);
 });
 
-route.get("/:id", (req,res) => {
-    const id = req.params.id;
+router.get('/:_id', async(req,res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params._id))
+        return res.status(400).json({ message: 'Id inválido' });
 
-    const alunos = escola.cursos.map(curso => {
-        return curso.alunos;
-    });
+    const aluno = await Aluno
+        .findOne({ _id: req.params._id })
+        .select('_id nome dataNascimento matriculaAtiva estadoCivil matricula telefone idade');
 
-    const alunosFlatten = R.flatten(alunos);
-
-    const aluno = alunosFlatten.find(aluno => aluno.id === id);
-    
-    if (!aluno) return res.status(404).json({ message: 'Não encontrado' });
+    if (!aluno) return res.status(404).json({ message: 'Aluno não encontrado' });
 
     return res.status(200).json(aluno);
 });
 
-route.post("/", (req, res) => {
-    const cursoId = req.body.cursoId;
-
-    const aluno = {
-        id: req.body.id,
+router.post('/', async(req, res) => {
+    const aluno = await Aluno.create({
+        _id: mongoose.Types.ObjectId(),
         nome: req.body.nome,
         dataNascimento: req.body.dataNascimento,
         matriculaAtiva: req.body.matriculaAtiva,
@@ -38,45 +35,18 @@ route.post("/", (req, res) => {
         matricula: req.body.matricula,
         telefone: req.body.telefone,
         idade: req.body.idade
-    };
-    
-    const cursoIdx = escola.cursos.findIndex(curso => curso.id === cursoId);
+    });
 
-    if (cursoIdx === undefined) return res.status(404).json({ message: 'Curso não encontrado' });
-
-    escola.cursos[cursoIdx].push(aluno);
-    return res.status(201).json({ aluno });
+    return res.status(201).json(aluno);
 });
 
+router.delete('/:_id', async(req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params._id))
+        return res.status(400).json({ message: 'Id inválido' });
 
+    await Aluno.deleteOne({ _id: req.params._id });
 
-
-
-route.put('/:id', (req, res) => {
-    const id = req.params.id;
-    const nome = req.body.nome;
-
-    const curso = escola.cursos.find(curso => curso.id === id);
-
-    if (curso) {
-        const cursos = escola.cursos.filter(curso => curso.id !== id);
-        cursos.push({ id, nome });
-        escola.cursos = cursos;
-
-        return res.status(201).json({ message: 'Curso alterado' });
-    }
-
-    escola.cursos.push({ id, nome });
-    return res.status(201).json({ message: 'Curso adicionado' });
+    return res.status(200).json({ message: 'Aluno removido' });
 });
 
-route.delete("/:id", (req, res) => {
-    const id = req.params.id;
-    const cursos = escola.cursos.filter(curso => curso.id !== id);
-    escola.cursos = cursos;
-    console.log(escola.cursos);
-    
-    return res.status(200).json({message: "Removido com sucesso"});
-});
-
-module.exports = route;
+module.exports = router;

@@ -2,6 +2,7 @@ const express = require("express");
 const rotaALuno = require("./src/routes/alunos");
 const rotaCurso = require("./src/routes/cursos");
 const bodyParser = require('body-parser');
+require('./src/config/database');
 
 const app = express();
 
