@@ -1,6 +1,7 @@
 const escola = {
     cursos: [
         {
+            id: '55',
             nome: 'Sistemas de Informação',
             alunos: [
                 {
@@ -46,6 +47,7 @@ const escola = {
             ]
         },
         {
+            id: '23',
             nome: 'Análise de Sistemas',
             alunos: [
                 {
