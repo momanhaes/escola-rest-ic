@@ -1,24 +1,24 @@
 GET http://localhost:3000/cursos
 
 ###
-GET http://localhost:3000/cursos/Medicina
+GET http://localhost:3000/cursos/:nomeCurso
 
 ###
 POST http://localhost:3000/cursos
 Content-Type: application/json
 
 {
-  "nome": "Direito"
+  "nome": "Nome do curso"
 }
 
 ###
-PUT http://localhost:3000/cursos/5cd1082e7db98d7a546a6036
+PUT http://localhost:3000/cursos/:_id
 Content-Type: application/json
 
 {
-  "nome": "Administração"
+  "nome": "Nome do curso"
 }
 
 ###
-DELETE http://localhost:3000/cursos/5cd105c0d7d50d58e00397c8
+DELETE http://localhost:3000/cursos/:_id
 Content-Type: application/json

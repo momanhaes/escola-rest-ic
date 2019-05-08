@@ -30,9 +30,6 @@ const create = async(req, res) => {
 };
 
 const update = async(req, res) => {
-  if (!cursoService.isIdValid(req.params._id))
-    return res.status(400).json({ message: 'Id inválido' });
-
   const curso = await cursoService.findById(req.params._id);
 
   if (curso) {

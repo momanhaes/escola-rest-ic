@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 const Curso = require('../models/Curso');
 
-async function isIdValid(_id) {
-  return mongoose.Types.ObjectId.isValid(_id);
-}
-
 async function findAll() {
   return await Curso
     .find()
@@ -41,7 +37,6 @@ module.exports = {
   findByName,
   create,
   deleteById,
-  isIdValid,
   findById,
   updateOne
 };
