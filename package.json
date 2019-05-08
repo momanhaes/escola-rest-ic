@@ -7,8 +7,7 @@
     "start": "node bin/www",
     "dev": "nodemon bin/www",
     "test": "jest",
-    "precommit": "npm test",
-    "coverage": "jest --coverage"
+    "precommit": "npm test"
   },
   "repository": {
     "type": "git",
@@ -38,6 +37,8 @@
     }
   },
   "jest": {
-    "verbose": true
+    "verbose": true,
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   }
 }
