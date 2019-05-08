@@ -32,9 +32,14 @@ async function deleteById(_id) {
   await Aluno.deleteOne({ _id });
 }
 
+async function update({ _id, aluno }) {
+  await Aluno.updateOne({ _id }, aluno);
+}
+
 module.exports = {
   findAll,
   findById,
   create,
-  deleteById
+  deleteById,
+  update
 };

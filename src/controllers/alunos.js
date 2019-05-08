@@ -24,6 +24,22 @@ const create = async(req, res) => {
   return res.status(201).json(aluno);
 };
 
+const update = async(req, res) => {
+  const aluno = await alunoService.findById(req.params._id);
+
+  if (aluno) {
+    await alunoService.update({ _id: req.params._id, aluno: req.body });
+
+    return res.status(201).json({ message: 'Aluno atualizado' });
+  }
+
+  const addedAluno = await alunoService.create(req.body);
+
+  return res
+    .status(201)
+    .json({ message: 'Aluno adicionado', aluno: addedAluno });
+};
+
 const deleteById = async(req, res) => {
   await alunoService.deleteById(req.params._id);
 
@@ -34,5 +50,6 @@ module.exports = {
   findAll,
   findById,
   create,
-  deleteById
+  deleteById,
+  update
 };

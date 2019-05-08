@@ -11,7 +11,7 @@ Content-Type: application/json
 
 {
   "cursoId": "curso._id",
-  "nome": "Matheus",
+  "nome": "Matheus Genteluci",
   "dataNascimento": "05/11/1996",
   "matriculaAtiva": "5306254",
   "estadoCivil": "Solteiro",
@@ -21,4 +21,19 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/alunos/_id
+PUT http://localhost:3000/alunos/:_id
+Content-Type: application/json
+
+ {
+  "cursoId": "curso._id",
+  "nome": "Matheus Manhães",
+  "dataNascimento": "05/11/1996",
+  "matriculaAtiva": "5306254",
+  "estadoCivil": "Solteiro",
+  "matricula": "5306254",
+  "telefone": ["99551-5221"],
+  "idade": "22"
+ }
+
+###
+DELETE http://localhost:3000/alunos/:_id
