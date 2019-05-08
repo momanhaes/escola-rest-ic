@@ -2,7 +2,7 @@ GET http://localhost:3000/alunos
 Content-Type: application/json
 
 ###
-GET http://localhost:3000/alunos/5cd1021ab529381dec750084
+GET http://localhost:3000/alunos/:_id
 Content-Type: application/json
 
 ###
@@ -10,15 +10,15 @@ POST http://localhost:3000/alunos
 Content-Type: application/json
 
 {
-  "cursoId": "5cd101cdc4c9bf071cc3885c",
-  "nome": "Matheus Genteluci",
-  "dataNascimento": "06/02/1997",
-  "matriculaAtiva": "5306369",
+  "cursoId": "curso._id",
+  "nome": "Matheus",
+  "dataNascimento": "05/11/1996",
+  "matriculaAtiva": "5306254",
   "estadoCivil": "Solteiro",
-  "matricula": "5306369",
-  "telefone": ["99557-5991"],
+  "matricula": "5306254",
+  "telefone": ["99551-5221"],
   "idade": "22"
 }
 
 ###
-DELETE http://localhost:3000/alunos/5cd0fcb3f9a0ef7488e426bf
+DELETE http://localhost:3000/alunos/_id
